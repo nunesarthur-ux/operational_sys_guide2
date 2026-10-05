@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <semaphore.h>
+#include <unistd.h>
 
 typedef struct { int quantidade; } Pedido;
 
@@ -26,13 +27,14 @@ int processar_pedido(Pedido *p) {
 
     if (p->quantidade <= 0) {
         printf("Pedido invalido (quantidade=%d)\n", p->quantidade);
+        sem_post(&mutex);
         return -1;              /* <-- linha do bug: falta sem_post antes deste return */
     }
 
     estoque -= p->quantidade;
     printf("Pedido processado, estoque agora = %d\n", estoque);
 
-    sem_post(&mutex);
+    sem_post(&mutex); //o que acontece se eu tirar esse sem_post?
     return 0;
 }
 
@@ -46,6 +48,7 @@ int main(void) {
     sem_init(&mutex, 0, 1);
     signal(SIGALRM, watchdog);
     alarm(5);
+
 
     Pedido invalido = { .quantidade = -5 };
     Pedido valido   = { .quantidade = 10 };
