@@ -21,6 +21,10 @@ int contador = 0;
 void *tarefa(void *arg) {
     (void) arg;
     for (int i = 0; i < N_ITERACOES; i++) {
+        pthread_mutex_lock(&mutex);
+        contador++;
+        pthread_mutex_unlock(&mutex);
+        sleep(1);
         contador++;   /* <-- linha do bug: leitura+incremento+escrita sem protecao */
     }
     return NULL;
