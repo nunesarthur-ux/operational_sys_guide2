@@ -16,7 +16,7 @@ public class Trecho6Contador {
 
     static int valor = 0;
 
-    static void incrementar() {
+    static synchronized void incrementar() {
         valor++;   // <-- linha do bug: leitura+incremento+escrita sem protecao
     }
 
