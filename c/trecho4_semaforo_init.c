@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <semaphore.h>
+#include <unistd.h>
 
 sem_t mutex;
 
@@ -24,7 +25,7 @@ void watchdog(int sig) {
 }
 
 int main(void) {
-    sem_init(&mutex, 0, 0);   /* <-- linha do bug: deveria ser 1 */
+    sem_init(&mutex, 0, 1);   /* <-- linha do bug: deveria ser 1 */
     signal(SIGALRM, watchdog);
     alarm(3);
 
