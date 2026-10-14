@@ -14,6 +14,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <signal.h>
 #include <pthread.h>
 #include <semaphore.h>
@@ -28,15 +29,15 @@ sem_t mutex, vazio, cheio;
 void *produtor(void *arg) {
     (void) arg;
     for (int i = 0; i < N_ITENS; i++) {
-        sem_wait(&vazio);
-        sem_wait(&mutex);
+        sem_wait(&vazio); //sem_wait(&empty)
+        sem_wait(&mutex); //sem_wait(&mutex)
 
         buffer_dados[fim] = i;
         fim = (fim + 1) % TAM_BUFFER;
         printf("[produtor] inseriu item %d\n", i);
 
-        sem_post(&mutex);
-        sem_post(&vazio);   /* <-- linha do bug: deveria ser sem_post(&cheio) */
+        sem_post(&mutex); //sem_post(&mutex)
+        sem_post(&cheio);   /* <-- linha do bug: deveria ser sem_post(&cheio)  sem_post(&full)*/
     }
     return NULL;
 }
