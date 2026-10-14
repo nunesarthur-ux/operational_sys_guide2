@@ -17,7 +17,9 @@ public class Trecho10WaitForaSync {
 
         void aguardarItem() throws InterruptedException {
             while (contador == 0) {
-                lock.wait();      // <-- linha do bug: falta 'synchronized (lock)' em volta
+                synchronized (lock) {
+                    lock.wait();      // <-- linha do bug: falta 'synchronized (lock)' em volta
+                }
             }
             contador--;
         }
