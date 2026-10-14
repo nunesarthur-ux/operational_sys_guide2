@@ -32,7 +32,7 @@ public class Trecho7Visibilidade {
         valor++;
     }
 
-    public int getValor() {
+    public synchronized int getValor() {
         return valor;   // <-- linha do bug: falta 'synchronized' (ou 'volatile' no campo)
     }
 
